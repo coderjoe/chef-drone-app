@@ -24,8 +24,8 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, all_on_start: true, cmd: "bundle exec rspec" do
-  require "guard/rspec/dsl"
+guard :rspec, all_on_start: true, cmd: 'bundle exec rspec' do
+  require 'guard/rspec/dsl'
   dsl = Guard::RSpec::Dsl.new(self)
 
   # Feel free to open issues for suggestions and improvements
@@ -42,4 +42,10 @@ guard :rspec, all_on_start: true, cmd: "bundle exec rspec" do
 
   # Chefspecs
   watch(%r{^recipes/(.+)\.rb$}) { |m| "spec/unit/recipes/#{m[1]}_spec.rb" }
+end
+
+guard :rubocop, all_on_start: false do
+  watch(/.+\.rb$/)
+  watch(/.+\.rake$/)
+  watch(%r{(?:.+/)?\.rubocop\.yml$}) { |m| File.dirname(m[0]) }
 end

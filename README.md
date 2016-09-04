@@ -1,6 +1,8 @@
 Description
 ===========
 
+[![Build Status](https://travis-ci.org/coderjoe/chef-droneio.svg?branch=master)](https://travis-ci.org/coderjoe/chef-droneio)
+
 Installs docker, pulls the drone.io docker image, configures drone,
 and monitors the drone.io container via runit.
 

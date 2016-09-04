@@ -41,10 +41,10 @@ remote_config = {
 
 database_config = nil
 
-if !node['drone']['database']['driver'].nil?
+unless node['drone']['database']['driver'].nil?
   database_config = {
     driver: node['drone']['database']['driver'],
-    config: node['drone']['database']['config'],
+    config: node['drone']['database']['config']
   }
 end
 
@@ -52,7 +52,7 @@ template '/etc/drone/dronerc' do
   source 'dronerc.erb'
   mode '0640'
 
-  variables :config => {
+  variables config: {
     remote: remote_config,
     database: database_config
   }

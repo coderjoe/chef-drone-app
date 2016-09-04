@@ -24,7 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
 require 'spec_helper'
 
 describe 'droneio::docker' do
@@ -40,7 +39,8 @@ describe 'droneio::docker' do
       end
 
       it 'should not install docker via script' do
-        expect(chef_run).to_not create_docker_installation_script('get.docker.com')
+        expect(chef_run)
+          .to_not create_docker_installation_script('get.docker.com')
       end
     end
 

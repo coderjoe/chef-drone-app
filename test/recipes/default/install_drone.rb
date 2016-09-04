@@ -17,10 +17,14 @@ describe file('/etc/drone/dronerc') do
   it { should be_grouped_into 'root' }
   its('mode') { should cmp '0640' }
 
-  its('content') { should match /REMOTE_DRIVER=gitlab/ }
-  its('content') { should match %r{REMOTE_CONFIG=https://example\.com/fakeremoteconfig} }
-  its('content') { should match /DATABASE_DRIVER=sqlite3/ }
-  its('content') { should match %r{DATABASE_CONFIG=/var/lib/drone/kitchen\.sqlite} }
+  its('content') { should match(/REMOTE_DRIVER=gitlab/) }
+  its('content') do
+    should match %r{REMOTE_CONFIG=https://example\.com/fakeremoteconfig}
+  end
+  its('content') { should match(/DATABASE_DRIVER=sqlite3/) }
+  its('content') do
+    should match %r{DATABASE_CONFIG=/var/lib/drone/kitchen\.sqlite}
+  end
 end
 
 describe port(8000) do

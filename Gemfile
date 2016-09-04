@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 gem 'chef'
 gem 'berkshelf'
@@ -15,3 +15,5 @@ gem 'kitchen-inspec'
 
 gem 'guard'
 gem 'guard-rspec', require: false
+gem 'guard-rubocop', require: false
+gem 'guard-foodcritic', require: false
