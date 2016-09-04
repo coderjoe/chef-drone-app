@@ -1,0 +1,26 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+  log_level: debug
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu-16.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[droneio::default]
+    attributes:
+      drone:
+        remote:
+          driver: gitlab
+          config: https://example.com/fakeremoteconfig
+        database:
+          driver: sqlite3
+          config: /var/lib/drone/kitchen.sqlite
