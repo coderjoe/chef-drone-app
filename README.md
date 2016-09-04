@@ -1,7 +1,10 @@
 Description
 ===========
 
+[![Cookbook Version](https://img.shields.io/cookbook/v/droneio.svg)](https://community.opscode.com/cookbooks/droneio)
 [![Build Status](https://travis-ci.org/coderjoe/chef-droneio.svg?branch=master)](https://travis-ci.org/coderjoe/chef-droneio)
+[![Code Climate](https://codeclimate.com/github/coderjoe/chef-droneio/badges/gpa.svg)](https://codeclimate.com/github/coderjoe/chef-droneio)
+[![Dependency Status](https://gemnasium.com/badges/github.com/coderjoe/chef-droneio.svg)](https://gemnasium.com/github.com/coderjoe/chef-droneio)
 
 Installs docker, pulls the drone.io docker image, configures drone,
 and monitors the drone.io container via runit.
