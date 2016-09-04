@@ -4,7 +4,11 @@ maintainer_email 'coderjoe@coderjoe.net'
 license 'mit'
 description 'Installs/Configures drone.io'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '0.1.0'
+version '0.1.1'
+
+supports 'ubuntu', '>= 14.04'
+supports 'centos', '>= 7.1'
+supports 'debian', '>= 8.1'
 
 if respond_to?(:issues_url)
   issues_url 'https://github.com/coderjoe/chef-droneio/issues'

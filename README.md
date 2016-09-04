@@ -15,10 +15,12 @@ For more information about drone.io:
 Changes
 =======
 
-## v0.1.0
+## v0.1.1
 
-Roadmap
--------
+* Add supported platform restrictions to the cookbook, and adjust the kitchen
+test suite to test the supported platforms.
+
+## v0.1.0
 
 * Initial implementation and release of drone.io cookbook.
 
@@ -27,7 +29,12 @@ Requirements
 
 ## Platform:
 
-* Ubuntu 16.04
+* Ubuntu 16.04, 15.04, and 14.04
+* Debian 8.1 and 8.5
+* CentOS 7.1 and 7.2
+
+Other compatible platforms may function, but they have not been tested with
+this cookbook.
 
 Attributes
 ==========
