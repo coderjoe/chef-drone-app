@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: droneio
-# Spec:: install_drone
+# Spec:: drone
 #
 # The MIT License (MIT)
 #
@@ -26,10 +26,12 @@
 
 require 'spec_helper'
 
-describe 'droneio::runit' do
+describe 'droneio::drone' do
   context 'When all attributes are default, on an unspecified platform' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new
+      runner.node.default['drone']['remote']['driver'] = 'coffee'
+      runner.node.default['drone']['remote']['config'] = 'http://example.com/fake/site'
       runner.converge(described_recipe)
     end
 
@@ -37,14 +39,34 @@ describe 'droneio::runit' do
       expect { chef_run }.to_not raise_error
     end
 
-    it 'should include the runit recipe' do
-      expect(chef_run).to include_recipe('runit::default')
+    it 'pulls the drone image' do
+      expect(chef_run).to pull_if_missing_docker_image('drone').with(
+        repo: 'drone/drone',
+        tag: '0.4'
+      )
     end
 
-    it 'should create the service' do
-      expect(chef_run).to enable_runit_service('drone').with(
-        default_logger: true,
-        finish: true
+    it 'stops the existing drone container' do
+      expect(chef_run).to stop_docker_container('drone')
+    end
+
+    it 'deletes the existing drone container' do
+      expect(chef_run).to delete_docker_container('drone')
+    end
+
+    it 'runs the drone container' do
+      expect(chef_run).to run_docker_container('drone').with(
+        repo: 'drone/drone',
+        tag: '0.4',
+        restart_policy: 'always',
+        port: '8000:8000',
+        host_name: 'drone',
+        env: [
+          'REMOTE_DRIVER=coffee',
+          'REMOTE_CONFIG=http://example.com/fake/site',
+          'DATABASE_DRIVER=sqlite3',
+          'DATABASE_CONFIG=/var/lib/drone/drone.sqlite'
+        ]
       )
     end
   end

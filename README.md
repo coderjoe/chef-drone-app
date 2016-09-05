@@ -6,8 +6,8 @@ Description
 [![Code Climate](https://codeclimate.com/github/coderjoe/chef-droneio/badges/gpa.svg)](https://codeclimate.com/github/coderjoe/chef-droneio)
 [![Dependency Status](https://gemnasium.com/badges/github.com/coderjoe/chef-droneio.svg)](https://gemnasium.com/github.com/coderjoe/chef-droneio)
 
-Installs docker, pulls the drone.io docker image, configures drone,
-and monitors the drone.io container via runit.
+Installs docker, pulls the drone.io docker image, configures drone, and runs
+the drone webservice on port 8000.
 
 For more information about drone.io:
 
@@ -17,6 +17,14 @@ For more information about drone.io:
 
 Changes
 =======
+
+## v0.2.0
+
+* Remove runit as the service manager in favor of using the docker service's
+restart policies to manage service state.
+* Drone config is now explicitly declared via --env, as opposed to being stored
+in /etc/drone/dronerc
+* The /etc/drone directory is no longer created, and no config is stored.
 
 ## v0.1.1
 
@@ -44,7 +52,7 @@ Attributes
 
 See `attributes/default.rb` for defaults.
 
-
+* `node['drone']['version']` - The version of drone to install.
 * `node['drone']['remote']['driver']` - The drone.io remote driver
 * `node['drone']['remote']['config']` - The drone.io remote config
 * `node['drone']['database']['driver']` - The drone.io database driver
@@ -59,8 +67,7 @@ default
 Installs, configures, and runs drone.io. This recipe calls the following:
 
 1. recipe[droneio::docker]
-2. recipe[droneio::install_drone]
-3. recipe[droneio::runit]
+2. recipe[droneio::drone]
 
 docker
 ------
@@ -68,17 +75,11 @@ docker
 Installs docker using the script from `https://get.docker.com` if docker is not
 already installed.
 
-install_drone
--------------
-
-Pulls the drone.io docker image drone/drone:0.4 and saves drone.io configuration
-environment variables to `/etc/drone/dronerc`.
-
-runit
+drone
 -----
 
-Installs the runit process monitor, and configures the drone.io container as
-a monitored service.
+Pulls the drone.io docker image and runs the drone container with the configured
+drivers and configurations.
 
 Usage
 =====

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: droneio
-# Recipe:: install_drone
+# Recipe:: drone
 #
 # The MIT License (MIT)
 #
@@ -24,36 +24,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-docker_image('drone/drone') do
-  tag '0.4'
-  action :pull
+docker_image('drone') do
+  repo 'drone/drone'
+  tag node['drone']['version']
+  action :pull_if_missing
 end
 
-directory('/etc/drone') do
-  mode '0750'
-  action :create
-end
-
-remote_config = {
-  driver: node['drone']['remote']['driver'],
-  config: node['drone']['remote']['config']
-}
-
-database_config = nil
-
-unless node['drone']['database']['driver'].nil?
-  database_config = {
-    driver: node['drone']['database']['driver'],
-    config: node['drone']['database']['config']
-  }
-end
-
-template '/etc/drone/dronerc' do
-  source 'dronerc.erb'
-  mode '0640'
-
-  variables config: {
-    remote: remote_config,
-    database: database_config
-  }
+docker_container('drone') do
+  repo 'drone/drone'
+  tag node['drone']['version']
+  port '8000:8000'
+  restart_policy 'always'
+  host_name 'drone'
+  env([
+        "REMOTE_DRIVER=#{node['drone']['remote']['driver']}",
+        "REMOTE_CONFIG=#{node['drone']['remote']['config']}",
+        "DATABASE_DRIVER=#{node['drone']['database']['driver']}",
+        "DATABASE_CONFIG=#{node['drone']['database']['config']}"
+      ])
+  volumes([
+            '/var/lib/drone:/var/lib/drone',
+            '/var/run/docker.sock:/var/run/docker.sock'
+          ])
+  action [:stop, :delete, :run]
 end

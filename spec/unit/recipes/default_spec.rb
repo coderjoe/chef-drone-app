@@ -48,11 +48,7 @@ describe 'droneio::default' do
     end
 
     it 'should install drone' do
-      expect(chef_run).to include_recipe('droneio::install_drone')
-    end
-
-    it 'should setup runit services' do
-      expect(chef_run).to include_recipe('droneio::runit')
+      expect(chef_run).to include_recipe('droneio::drone')
     end
   end
 end

@@ -25,5 +25,4 @@
 # THE SOFTWARE.
 
 include_recipe 'droneio::docker'
-include_recipe 'droneio::install_drone'
-include_recipe 'droneio::runit'
+include_recipe 'droneio::drone'

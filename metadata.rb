@@ -4,7 +4,7 @@ maintainer_email 'coderjoe@coderjoe.net'
 license 'mit'
 description 'Installs/Configures drone.io'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '0.1.1'
+version '0.2.0'
 
 supports 'ubuntu', '>= 14.04'
 supports 'centos', '>= 7.1'
@@ -20,5 +20,4 @@ end
 
 chef_version '>= 12.6'
 
-depends 'runit', '~> 2.0.0'
 depends 'docker', '~> 2.9.6'
