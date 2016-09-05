@@ -70,4 +70,20 @@ describe 'droneio::drone' do
       )
     end
   end
+
+  context 'When a custom port is provided, on an unspecified platform' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new
+      runner.node.default['drone']['remote']['driver'] = 'coffee'
+      runner.node.default['drone']['remote']['config'] = 'http://example.com/fake/site'
+      runner.node.override['drone']['port'] = 1234
+      runner.converge(described_recipe)
+    end
+
+    it 'uses the custom port' do
+      expect(chef_run).to run_docker_container('drone').with(
+        port: '1234:8000'
+      )
+    end
+  end
 end

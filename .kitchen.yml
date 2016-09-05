@@ -25,6 +25,7 @@ suites:
       - recipe[droneio::default]
     attributes:
       drone:
+        port: 1234
         remote:
           driver: gitlab
           config: https://example.com/fakeremoteconfig

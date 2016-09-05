@@ -10,7 +10,7 @@ require 'json'
 drone_inspect = command('docker inspect --type container drone')
 container = JSON.parse(drone_inspect.stdout).first
 
-describe port(8000) do
+describe port(1234) do
   it { should be_listening }
 end
 

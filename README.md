@@ -18,6 +18,10 @@ For more information about drone.io:
 Changes
 =======
 
+## v0.3.0
+
+* Add an `node['drone']['port']` to control drone's listen port
+
 ## v0.2.0
 
 * Remove runit as the service manager in favor of using the docker service's
@@ -53,6 +57,7 @@ Attributes
 See `attributes/default.rb` for defaults.
 
 * `node['drone']['version']` - The version of drone to install.
+* `node['drone']['port']` - The drone.io web port.
 * `node['drone']['remote']['driver']` - The drone.io remote driver
 * `node['drone']['remote']['config']` - The drone.io remote config
 * `node['drone']['database']['driver']` - The drone.io database driver
@@ -79,13 +84,15 @@ drone
 -----
 
 Pulls the drone.io docker image and runs the drone container with the configured
-drivers and configurations.
+drivers and configurations, binding the container web port to the configured
+host port.
 
 Usage
 =====
 
 To get drone running on a machine, use `recipe[droneio]`. Once it is installed
-and configured drone will be listening on port 8000.
+and configured drone will be listening on port 8000. The port can be configured
+via this cookbook's attributes.
 
 Author
 ======

@@ -33,7 +33,7 @@ end
 docker_container('drone') do
   repo 'drone/drone'
   tag node['drone']['version']
-  port '8000:8000'
+  port "#{node['drone']['port']}:8000"
   restart_policy 'always'
   host_name 'drone'
   env([
