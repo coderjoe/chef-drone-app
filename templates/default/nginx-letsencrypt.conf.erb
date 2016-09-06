@@ -1,0 +1,22 @@
+server {
+	listen 80;
+  server_name <%= node['fqdn'] %>;
+
+	location ~ /.well-known {
+		root /srv/letsencrypt/;
+	}
+}
+
+server {
+	listen 443 ssl;
+  server_name     <%= node['fqdn'] %>;
+
+  include snippets/ssl-<%=node['fqdn'] %>.conf;
+  include snippets/ssl-params.conf;
+
+	access_log /var/log/nginx/nginx-ssl.access.log;
+
+	location ~ /.well-known {
+		root /srv/letsencrypt/;
+	}
+}

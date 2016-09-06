@@ -1,13 +1,13 @@
 Description
 ===========
 
-[![Cookbook Version](https://img.shields.io/cookbook/v/droneio.svg)](https://community.opscode.com/cookbooks/droneio)
-[![Build Status](https://travis-ci.org/coderjoe/chef-droneio.svg?branch=master)](https://travis-ci.org/coderjoe/chef-droneio)
-[![Code Climate](https://codeclimate.com/github/coderjoe/chef-droneio/badges/gpa.svg)](https://codeclimate.com/github/coderjoe/chef-droneio)
-[![Dependency Status](https://gemnasium.com/badges/github.com/coderjoe/chef-droneio.svg)](https://gemnasium.com/github.com/coderjoe/chef-droneio)
+[![Cookbook Version](https://img.shields.io/cookbook/v/drone_app.svg)](https://community.opscode.com/cookbooks/drone-app)
+[![Build Status](https://travis-ci.org/coderjoe/chef-drone-app.svg?branch=master)](https://travis-ci.org/coderjoe/chef-drone-app)
+[![Code Climate](https://codeclimate.com/github/coderjoe/chef-drone-app/badges/gpa.svg)](https://codeclimate.com/github/coderjoe/chef-drone-app)
+[![Dependency Status](https://gemnasium.com/badges/github.com/coderjoe/chef-drone-app.svg)](https://gemnasium.com/github.com/coderjoe/chef-drone-app)
 
-Installs docker, pulls the drone.io docker image, configures drone, and runs
-the drone webservice on port 8000.
+Installs the drone.io docker image with an nginx ssl proxy passthrough with
+certificiate registration and renewal managed by letsencrypt.
 
 For more information about drone.io:
 
@@ -18,38 +18,20 @@ For more information about drone.io:
 Changes
 =======
 
-## v0.3.0
+## v1.0.0
 
-* Add an `node['drone']['port']` to control drone's listen port
-
-## v0.2.0
-
-* Remove runit as the service manager in favor of using the docker service's
-restart policies to manage service state.
-* Drone config is now explicitly declared via --env, as opposed to being stored
-in /etc/drone/dronerc
-* The /etc/drone directory is no longer created, and no config is stored.
-
-## v0.1.1
-
-* Add supported platform restrictions to the cookbook, and adjust the kitchen
-test suite to test the supported platforms.
-
-## v0.1.0
-
-* Initial implementation and release of drone.io cookbook.
+* Install an nginx ssl proxy in front of a drone.io server both configured via docker.
 
 Requirements
 ============
 
 ## Platform:
 
-* Ubuntu 16.04, 15.04, and 14.04
-* Debian 8.1 and 8.5
-* CentOS 7.1 and 7.2
+* Ubuntu 16.04
 
-Other compatible platforms may function, but they have not been tested with
-this cookbook.
+Warning! Due to differences in letsencrypt implementations it's highly unlikely
+this cookbook will function on other platforms. I don't need anything other than
+Ubuntu 16.04, but pull requests are very welcome to resolve this issue.
 
 Attributes
 ==========
@@ -69,30 +51,55 @@ Recipes
 default
 -------
 
-Installs, configures, and runs drone.io. This recipe calls the following:
+Installs and configures drone.io with nginx an ssl proxy using letsencrypt
+certificates.
 
-1. recipe[droneio::docker]
-2. recipe[droneio::drone]
+Uses:
 
-docker
-------
-
-Installs docker using the script from `https://get.docker.com` if docker is not
-already installed.
+1. `recipe[drone_app::drone]`
+2. `recipe[drone_app::nginx]`
+3. `recipe[drone_app::letsencrypt]`
+4. `recipe[drone_app::firewall]`
 
 drone
 -----
 
-Pulls the drone.io docker image and runs the drone container with the configured
-drivers and configurations, binding the container web port to the configured
-host port.
+Installs, configures, and runs the drone.io docker container.
+
+nginx
+-----
+
+Installs, configures, and runs the nginx docker container as an ssl proxy
+for drone.io. Configures itself with self-signed certificates.
+
+The certificates referenced by nginx are controlled via symlinks located at
+`/etc/nginx/ssl/<machine fqdn>/`.
+
+`cert.pem` - should link to the site public certificate chain.
+`cert.key` - should link to the site's private key.
+
+If the symlinks already exist, this recipe will not create or update them.
+
+letsencrypt
+-----------
+
+Installs the letsencrypt executable, configures it for webroot verification,
+requests a certificate for the node's FQDN, and updates the site's `cert.pem`
+and `cert.key` to point to the newly requested letsencrypt certificates.
+
+firewall
+--------
+
+Configure the machine firewall to allow SSH, HTTP, and HTTPS on ports 22, 80,
+and 443 repectively.
 
 Usage
 =====
 
-To get drone running on a machine, use `recipe[droneio]`. Once it is installed
-and configured drone will be listening on port 8000. The port can be configured
-via this cookbook's attributes.
+To get drone running on a machine, use `recipe[drone_app]`. Once it is installed
+and configured nginx will be listening on both port 80 and 443. Nginx will be
+configured to proxy to drone as well as provide a web frontend for letsencrypt
+renewal requests.
 
 Author
 ======

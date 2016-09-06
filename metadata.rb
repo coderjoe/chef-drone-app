@@ -1,23 +1,19 @@
-name 'droneio'
+name 'drone_app'
 maintainer 'Joe Bauser'
 maintainer_email 'coderjoe@coderjoe.net'
 license 'mit'
-description 'Installs/Configures drone.io'
+description 'Installs drone.io behind an nginx ssl proxy with letsencrypt certs'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '0.3.0'
-
-supports 'ubuntu', '>= 14.04'
-supports 'centos', '>= 7.1'
-supports 'debian', '>= 8.1'
-
-if respond_to?(:issues_url)
-  issues_url 'https://github.com/coderjoe/chef-droneio/issues'
-end
-
-if respond_to?(:source_url)
-  source_url 'https://github.com/coderjoe/chef-droneio'
-end
+source_url 'https://github.com/coderjoe/chef-drone-app'
+issues_url 'https://github.com/coderjoe/chef-drone-app/issues'
+version '1.0.0'
 
 chef_version '>= 12.6'
 
+depends 'hostname'
+depends 'firewall', '~> 2.5.2'
+depends 'openssl', '~> 5.0.1'
 depends 'docker', '~> 2.9.6'
+depends 'drone', '~> 3.1.2'
+
+supports 'ubuntu', '>= 16.04'

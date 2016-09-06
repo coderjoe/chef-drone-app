@@ -1,6 +1,9 @@
 ---
 driver:
   name: vagrant
+  vm_hostname: example.com
+  network:
+    - ["private_network", {type: "dhcp"}]
 
 provisioner:
   name: chef_solo
@@ -10,25 +13,29 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-14.04
-  - name: ubuntu-15.04
-  - name: ubuntu-16.04
-  - name: centos-7.1
-  - name: centos-7.2
-  - name: debian-8.5
-  - name: debian-8.1
+  - name: geerlingguy/ubuntu1604
+# - name: ubuntu-16.04
+    driver_config:
+      customize:
+        cpus: 2
+        memory: 2048
 
 suites:
   - name: default
     run_list:
-      - recipe[apt]
-      - recipe[droneio::default]
+      - recipe[boulder_server]
+      - recipe[drone_app::default]
     attributes:
+      boulder:
+        revision: 2d33a9900cafe82993744fe73bd341fe47df2171
+      letsencrypt:
+        server: http://127.0.0.1:4000/directory
+        contact: fake@example.com
       drone:
-        port: 1234
-        remote:
-          driver: gitlab
-          config: https://example.com/fakeremoteconfig
-        database:
-          driver: sqlite3
-          config: /var/lib/drone/kitchen.sqlite
+        version: '0.4'
+        port: '1234'
+        config:
+          remote_driver: gitlab
+          remote_config: https://example.com/fakeremoteconfig
+          database_driver: sqlite3
+          database_config: /var/lib/drone/kitchen.sqlite

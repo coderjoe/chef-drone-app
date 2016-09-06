@@ -1,6 +1,6 @@
 # # encoding: utf-8
 
-# Inspec test for recipe droneio::drone
+# Inspec test for recipe drone_app::drone
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at https://docs.chef.io/inspec_reference.html
@@ -12,6 +12,10 @@ container = JSON.parse(drone_inspect.stdout).first
 
 describe port(1234) do
   it { should be_listening }
+end
+
+describe file('/var/lib/drone/kitchen.sqlite') do
+  it { should exist }
 end
 
 describe drone_inspect do

@@ -2,6 +2,7 @@
 source 'https://rubygems.org'
 
 gem 'chef'
+gem 'chef-vault'
 gem 'berkshelf'
 
 gem 'rspec'

@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: droneio
-# Recipe:: docker
+# Cookbook Name:: boulder_server
+# Recipe:: default
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2016 Joe Bauser
+# Copyright (c) 2016 Joseph Bauser
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# Remove any old versions of docker
-package 'lxc-docker' do
-  action :purge
+cmd = %w(
+  apt-key
+  adv
+  --recv
+  --keyserver
+  hkp://keyserver.ubuntu.com:80
+  F1656F24C74CD1D8
+)
+
+execute('apt_fetch_boulder_key') do
+  command cmd.join(' ')
 end
 
-docker_installation_script 'get.docker.com' do
-  action :create
-  not_if 'which docker'
-end
+include_recipe 'apt::default'
 
-group 'docker'
-
-service 'docker' do
-  action [:enable, :start]
-end
+include_recipe 'letsencrypt-boulder-server'

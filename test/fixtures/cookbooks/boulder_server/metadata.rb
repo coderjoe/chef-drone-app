@@ -1,0 +1,10 @@
+name 'boulder_server'
+maintainer 'Joseph Bauser'
+maintainer_email 'coderjoe@coderjoe.net'
+license 'mit'
+description 'Install a boulder server for local letsencrypt tests'
+long_description 'Install a boulder server for local letsencrypt tests'
+version '0.1.0'
+
+depends 'apt'
+depends 'letsencrypt-boulder-server'

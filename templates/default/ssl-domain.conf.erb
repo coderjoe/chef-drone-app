@@ -1,0 +1,4 @@
+# ssl_certificate /etc/letsencrypt/live/<%= node['fqdn'] %>/fullchain.pem;
+# ssl_certificate_key /etc/letsencrypt/live/<%= node['fqdn'] %>/privkey.pem;
+ssl_certificate /etc/nginx/ssl/<%= node['fqdn'] %>/cert.pem;
+ssl_certificate_key /etc/nginx/ssl/<%= node['fqdn'] %>/cert.key;
