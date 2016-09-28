@@ -6,7 +6,7 @@ description 'Installs drone.io behind an nginx ssl proxy with letsencrypt certs'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 source_url 'https://github.com/coderjoe/chef-drone-app'
 issues_url 'https://github.com/coderjoe/chef-drone-app/issues'
-version '1.0.0'
+version '1.0.1'
 
 chef_version '>= 12.6'
 
