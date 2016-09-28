@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'drone_app::drone' do
   context 'When all attributes are default, on an unspecified platform' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new
+      runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '16.04')
       runner.converge(described_recipe)
     end
 
@@ -32,7 +32,7 @@ describe 'drone_app::drone' do
 
   context 'When an explicit port is set , on an unspecified platform' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new
+      runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '16.04')
       runner.node.override['drone']['port'] = '1234'
       runner.converge(described_recipe)
     end

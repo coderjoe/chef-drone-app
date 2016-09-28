@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'drone_app::_letsencrypt_nginx' do
   context 'When all attributes are default, on an unspecified platform' do
     let(:chef_run) do
-      runner = ChefSpec::SoloRunner.new
+      runner = ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '16.04')
       runner.node.automatic['fqdn'] = 'example.com'
       runner.node.override['letsencrypt']['contact'] = 'fake@example.com'
       runner.node.override['letsencrypt']['staging'] = false
